@@ -14,7 +14,7 @@ mpi4py は Python で MPI を利用するためのパッケージです。
 
 # 実行方法
 Docker の当該コンテナを起動し、コンテナ内（ `workspace` ）に入っていることを前提とします。
-`src` フォルダ内にある `main.py` を 4 つのプロセッサで処理するには次のように書きます。
+`src` フォルダ内にある `main.py` を 4 つのプロセッサで処理するには次のように書きます（`mpiexec` の部分は `mpirun` でも可能です）。
 ```
 $ mpiexec -np 4 python src/main.py
 ```
