@@ -26,5 +26,5 @@ class TestPrime(unittest.TestCase):
         self.assertEqual(8, count_prime(20))
         self.assertEqual(10, count_prime(29))
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
