@@ -2,7 +2,6 @@ FROM continuumio/miniconda3
 
 RUN conda create -n mpi-env python=3.11
 
-RUN mkdir -p /workspace
 WORKDIR /workspace
 
 SHELL [ "conda", "run", "-n", "mpi-env", "/bin/bash", "-c" ]
