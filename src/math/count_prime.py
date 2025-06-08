@@ -11,7 +11,7 @@ def is_prime(target):
 def count_prime(n):
     count = 0
     for i in range(1, n + 1):
-        count += is_prime(i) # True の場合は 1, False の場合は 0 として扱われる
+        count += is_prime(i) # Python では True の場合 1, False の場合 0 として扱われる
     return count
 
 def main():
