@@ -2,8 +2,6 @@ FROM continuumio/miniconda3
 
 RUN conda create -n mpi-env python=3.11
 
-WORKDIR /workspace
-
 SHELL [ "conda", "run", "-n", "mpi-env", "/bin/bash", "-c" ]
 RUN conda install -c conda-forge mpi4py && echo "conda activate mpi-env" >> ~/.bashrc
 
