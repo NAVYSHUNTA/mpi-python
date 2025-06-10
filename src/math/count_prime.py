@@ -1,3 +1,5 @@
+# import time # 時間計測用のライブラリ
+
 # 素数判定
 def is_prime(target):
     if target < 2:
@@ -15,14 +17,9 @@ def count_prime(n):
     return count
 
 def main():
-    print("1 から n までの素数を数え上げます")
-    print("1 以上の正整数 n を入力してください: ", end="")
     n = int(input()) # 入力を受け取って整数に変換
-    if n < 1:
-        print("入力が不正です")
-        print(f"{n} は 1 以上の正整数ではありません")
-    else:
-        print(f"1 から {n} までの素数の個数は {count_prime(n)} です")
+    print(n, count_prime(n)) # (入力値, 答え, 実行時間) の形式にする（TODO）
+
 
 if __name__ == "__main__":
     main()
