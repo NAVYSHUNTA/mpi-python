@@ -1,5 +1,6 @@
 from mpi4py import MPI
 import time
+import math
 
 # 素数判定
 def is_prime(target):
@@ -19,21 +20,30 @@ def main():
 
     if rank == 0:
         for i in range(1, size):
-            base = n // (size - 1)
-            comm.send([base * (i - 1), min(n, base * i)], dest = i, tag = i)
+            base = math.ceil(n / (size - 1) ** 2)
+            one_step_base = base * (size - 1)
+            for j in range(1, size):
+                s = (i - 1) * one_step_base
+                comm.send([s + base * (j - 1) + 1, min(n + 1, s + base * j + 1)], dest = i, tag = j)
     else:
-        left, right = comm.recv(source = 0, tag = rank)
-        print(f"わたしはスタッフ {rank} で、{left} 以上 {right - 1} 以下の素数を数えますね！")
-        count = 0
-        for i in range(left, right):
-            count += is_prime(i) # Python では True の場合 1, False の場合 0 として扱われる
-        comm.send(count, dest = 0, tag = rank)
+        for j in range(1, size):
+            left, right = comm.recv(source = 0, tag = j)
+            count = 0
+            if left >= right:
+                comm.send(count, dest = 0, tag = j)
+                continue
+
+            print(f"わたしはスタッフ {rank} で、{left} 以上 {right - 1} 以下の素数を数えますね！")
+            for i in range(left, right):
+                count += is_prime(i) # Python では True の場合 1, False の場合 0 として扱われる
+            comm.send(count, dest = 0, tag = j)
 
     if rank == 0:
         time.sleep(0.5) # 他のスタッフが計算を終えるのを待つためにわざと待機
         total_count = 0
         for i in range(1, size):
-            total_count += comm.recv(source = i, tag = i)
+            for j in range(1, size):
+                total_count += comm.recv(source = i, tag = j)
         print(f"1 から {n} までの素数の個数は {total_count} です")
 
 if __name__ == "__main__":
