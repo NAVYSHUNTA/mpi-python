@@ -24,19 +24,19 @@ def main():
             one_step_base = base * (size - 1)
             for j in range(1, size):
                 s = (i - 1) * one_step_base
-                comm.send([s + base * (j - 1) + 1, min(n + 1, s + base * j + 1)], dest = i, tag = j)
+                comm.send([s + base * (j - 1) + 1, min(n + 1, s + base * j + 1)], dest = j, tag = i)
     else:
-        for j in range(1, size):
-            left, right = comm.recv(source = 0, tag = j)
+        for i in range(1, size):
+            left, right = comm.recv(source = 0, tag = i)
             count = 0
             if left >= right:
-                comm.send(count, dest = 0, tag = j)
+                comm.send(count, dest = 0, tag = i)
                 continue
 
             print(f"わたしはスタッフ {rank} で、{left} 以上 {right - 1} 以下の素数を数えますね！")
-            for i in range(left, right):
-                count += is_prime(i) # Python では True の場合 1, False の場合 0 として扱われる
-            comm.send(count, dest = 0, tag = j)
+            for num in range(left, right):
+                count += is_prime(num) # Python では True の場合 1, False の場合 0 として扱われる
+            comm.send(count, dest = 0, tag = i)
 
     if rank == 0:
         time.sleep(0.5) # 他のスタッフが計算を終えるのを待つためにわざと待機
