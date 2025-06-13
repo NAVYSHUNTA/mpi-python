@@ -2,6 +2,13 @@ from mpi4py import MPI
 import time
 import math
 
+# グローバル変数
+COMM = MPI.COMM_WORLD
+rank = COMM.Get_rank()
+LEADER_RANK = 0 # リーダーの rank 番号
+ALL_MEMBER_SIZE = COMM.Get_size()
+WORK_MEMBER_SIZE = ALL_MEMBER_SIZE - 1 # 並列度（メンバーに指示を出すリーダー自身を除く）
+
 # 素数判定
 def is_prime(target):
     if target < 2:
@@ -11,42 +18,51 @@ def is_prime(target):
             return False
     return True
 
-# 1 から n までの素数の個数を数え上げ
-def main():
-    comm = MPI.COMM_WORLD
-    rank = comm.Get_rank()
-    all_size = comm.Get_size()
-    work_size = all_size - 1 # 並列度（指示を出すスタッフを除く）
-    n = 20000 # 今後、ユーザーからの入力に変更する？（TODO）
-
+# 1 から n までの素数の個数を数え上げ（計算の指示）
+def calc_order(n):
     if rank == 0:
-        for i in range(1, all_size):
-            base = math.ceil(n / work_size ** 2)
-            one_step_base = base * work_size
-            for j in range(1, all_size):
+        for i in range(1, ALL_MEMBER_SIZE):
+            base = math.ceil(n / WORK_MEMBER_SIZE ** 2)
+            one_step_base = base * WORK_MEMBER_SIZE
+            for j in range(1, ALL_MEMBER_SIZE):
                 s = (i - 1) * one_step_base
-                comm.send([s + base * (j - 1) + 1, min(n + 1, s + base * j + 1)], dest = j, tag = i)
+                COMM.send([s + base * (j - 1) + 1, min(n + 1, s + base * j + 1)], dest = j, tag = i)
+
+# 1 から n までの素数の個数を数え上げ（指示された内容の計算）
+def count_prime():
+    if rank == LEADER_RANK:
+        pass # nothing
     else:
-        for i in range(1, all_size):
-            left, right = comm.recv(source = 0, tag = i)
+        for i in range(1, ALL_MEMBER_SIZE):
+            left, right = COMM.recv(source = 0, tag = i)
 
             # 無効な範囲の場合はカウントせずに終了
             count = 0
             if left >= right:
-                comm.send(count, dest = 0, tag = i)
+                COMM.send(count, dest = 0, tag = i)
                 continue
 
-            print(f"わたしはスタッフ {rank} で、{left} 以上 {right - 1} 以下の素数を数えますね！") # TODO: ここはスパコンで時間計測する前に削除する
+            print(f"わたしはメンバー {rank} で、{left} 以上 {right - 1} 以下の素数を数えますね！") # TODO: この行はスパコンで時間計測する前に削除する
             for num in range(left, right):
                 count += is_prime(num) # Python では True の場合 1, False の場合 0 として扱われる
-            comm.send(count, dest = 0, tag = i)
+            COMM.send(count, dest = 0, tag = i)
 
-    if rank == 0:
-        time.sleep(0.5) # 他のスタッフが計算を終えるのを待つためにわざと待機（TODO: ここはスパコンで時間計測する前に削除する）
+def main():
+    # ユーザーから受け取った入力をもとにリーダーがメンバーへ計算を指示する
+    if rank == LEADER_RANK:
+        n = int(input()) # 入力を受け取って整数に変換
+        calc_order(n) # メンバーに計算の指示を出す
+
+    # 各メンバーが計算を行う
+    count_prime()
+
+    # リーダーが計算結果を集計する
+    if rank == LEADER_RANK:
+        time.sleep(0.5) # 他のメンバーが計算を終えるのを待つためにわざと待機（TODO: この行はスパコンで時間計測する前に削除する）
         total_prime_count = 0
-        for i in range(1, all_size):
-            for j in range(1, all_size):
-                total_prime_count += comm.recv(source = i, tag = j)
+        for i in range(1, ALL_MEMBER_SIZE):
+            for j in range(1, ALL_MEMBER_SIZE):
+                total_prime_count += COMM.recv(source = i, tag = j)
         print(f"1 から {n} までの素数の個数は {total_prime_count} です")
 
 if __name__ == "__main__":
