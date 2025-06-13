@@ -63,7 +63,7 @@ def main():
         for member in range(1, ALL_MEMBER_SIZE):
             for repeat in range(1, ALL_MEMBER_SIZE):
                 total_prime_count += COMM.recv(source = member, tag = repeat)
-        print(f"1 から {n} までの素数の個数は {total_prime_count} です")
+        print(n, total_prime_count)
 
 if __name__ == "__main__":
     main()
