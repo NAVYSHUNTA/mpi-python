@@ -59,11 +59,11 @@ def main():
     # リーダーが計算結果を集計する
     if rank == LEADER_RANK:
         time.sleep(0.5) # 他のメンバーが計算を終えるのを待つためにわざと待機（TODO: この行はスパコンで時間計測する前に削除する）
-        total_prime_count = 0
+        total_count_prime = 0
         for member in range(1, ALL_MEMBER_SIZE):
             for repeat in range(1, ALL_MEMBER_SIZE):
-                total_prime_count += COMM.recv(source = member, tag = repeat)
-        print(n, total_prime_count)
+                total_count_prime += COMM.recv(source = member, tag = repeat)
+        print(n, total_count_prime)
 
 if __name__ == "__main__":
     main()
