@@ -48,9 +48,11 @@ def count_prime():
             COMM.send(count, dest = LEADER_RANK, tag = repeat)
 
 def main():
+    start_time = None
     # ユーザーから受け取った入力をもとにリーダーがメンバーへ計算を指示する
     if rank == LEADER_RANK:
         n = int(input()) # 入力を受け取って整数に変換
+        start_time = time.perf_counter()
         calc_order(n) # メンバーに計算の指示を出す
 
     # 各メンバーが計算を行う
@@ -63,7 +65,12 @@ def main():
         for member in range(1, ALL_MEMBER_SIZE):
             for repeat in range(1, ALL_MEMBER_SIZE):
                 total_count_prime += COMM.recv(source = member, tag = repeat)
-        print(n, total_count_prime)
+
+        end_time = time.perf_counter()
+        total_time_second = end_time - start_time
+        total_time_ms = total_time_second * 1000 # 秒からミリ秒に変換
+        total_time_ms_floor = int(total_time_ms) # 小数点以下を切り捨て
+        print(n, total_count_prime, total_time_ms_floor) # 入力値, 1 から n までの素数の個数, 実行時間（ミリ秒）
 
 if __name__ == "__main__":
     main()
