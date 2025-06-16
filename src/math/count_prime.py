@@ -1,4 +1,4 @@
-# import time # 時間計測用のライブラリ
+import time # 時間計測用のライブラリ
 
 # 素数判定
 def is_prime(target):
@@ -17,8 +17,12 @@ def count_prime(n):
     return count
 
 def main():
-    n = int(input()) # 入力を受け取って整数に変換
-    print(n, count_prime(n)) # (入力値, 答え, 実行時間) の形式にする（TODO）
+    n = int(input()) # 
+    start = time.time() # 開始時間を記録
+    answer = count_prime(n) # 素数の個数を数える
+    end = time.time() # 終了時間を記録
+    total_time = end - start #実行時間を計算
+    print(n, answer, total_time) # (入力値, 答え, 実行時間) の形式にする（TODO）
 
 if __name__ == "__main__":
     main()
