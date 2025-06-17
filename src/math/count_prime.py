@@ -18,9 +18,9 @@ def count_prime(n):
 
 def main():
     n = int(input()) # 入力を受け取って整数に変換
-    start_time = time.time()
+    start_time = time.perf_counter()
     total_count_prime = count_prime(n) # 素数の個数を数える
-    end_time = time.time()
+    end_time = time.perf_counter()
     total_time_second = end_time - start_time
     total_time_ms = 1000 * total_time_second # 秒からミリ秒に変換
     total_time_ms_floor = int(total_time_ms) # 小数点以下を切り捨て
