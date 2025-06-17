@@ -42,7 +42,7 @@ def count_prime():
                 COMM.send(count, dest = LEADER_RANK, tag = repeat)
                 continue
 
-            print(f"わたしはメンバー {rank} で、{left} 以上 {right - 1} 以下の素数を数えますね！") # TODO: この行はスパコンで時間計測する前に削除する
+            print(f"わたしはメンバー {rank} で、{left} 以上 {right - 1} 以下の素数を数えますね！", flush = True) # TODO: この行はスパコンで時間計測する前に削除する
             for num in range(left, right):
                 count += is_prime(num) # Python では True の場合 1, False の場合 0 として扱われる
             COMM.send(count, dest = LEADER_RANK, tag = repeat)
@@ -59,8 +59,8 @@ def main():
     count_prime()
 
     # リーダーが計算結果を集計する
+    COMM.Barrier() # 全てのスレッドを同期させる（待機）
     if rank == LEADER_RANK:
-        time.sleep(0.5) # 他のメンバーが計算を終えるのを待つためにわざと待機（TODO: この行はスパコンで時間計測する前に削除する）
         total_count_prime = 0
         for member in range(1, ALL_MEMBER_SIZE):
             for repeat in range(1, ALL_MEMBER_SIZE):
