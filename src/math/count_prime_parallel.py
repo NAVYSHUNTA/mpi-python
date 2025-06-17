@@ -68,7 +68,7 @@ def main():
 
         end_time = time.perf_counter()
         total_time_second = end_time - start_time
-        total_time_ms = total_time_second * 1000 # 秒からミリ秒に変換
+        total_time_ms = 1000 * total_time_second # 秒からミリ秒に変換
         total_time_ms_floor = int(total_time_ms) # 小数点以下を切り捨て
         print(n, total_count_prime, total_time_ms_floor) # 入力値, 1 から n までの素数の個数, 実行時間（ミリ秒）
 
