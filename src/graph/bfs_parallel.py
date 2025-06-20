@@ -4,7 +4,7 @@ from mpi4py import MPI
 COMM = MPI.COMM_WORLD # 全てのプロセスで共有されるコミュニケータ
 rank = COMM.Get_rank() # 自プロセスのランク番号
 LEADER_RANK = 0 # リーダーの rank 番号
-ALL_MEMBER_SIZE = COMM.Get_size() # 並列度（厳密にはそのコミュニケータに所属するプロセスの総数）
+SIZE = COMM.Get_size() # 並列度（厳密にはそのコミュニケータに所属するプロセスの総数）
 START_VERTEX = 0 # 開始頂点
 
 def main():
@@ -44,7 +44,7 @@ def main():
 
         local_target_vertex = [] # 自分が担当する頂点のリスト
         for i, vertex in enumerate(target_vertex):
-            if i % ALL_MEMBER_SIZE == rank:
+            if i % SIZE == rank:
                 local_target_vertex.append(vertex)
 
         for v in local_target_vertex:
