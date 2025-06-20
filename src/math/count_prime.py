@@ -11,7 +11,7 @@ def is_prime(target):
             return False # 割り切れる場合は素数ではないので False を返す
     return True
 
-# 1 から n までの素数の個数を数え上げる
+# 1 から n までの整数に含まれる素数の個数を数え上げる
 def count_prime(n):
     count = 0
     for num in range(1, n + 1):
