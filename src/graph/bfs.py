@@ -53,5 +53,6 @@ def main():
     dist = bfs(n, m, edges)
     print(*dist)
 
+# エントリポイント
 if __name__ == "__main__":
     main()

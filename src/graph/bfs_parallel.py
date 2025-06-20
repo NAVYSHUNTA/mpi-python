@@ -1,10 +1,10 @@
 from mpi4py import MPI
 
 # グローバル変数
-COMM = MPI.COMM_WORLD
-rank = COMM.Get_rank()
+COMM = MPI.COMM_WORLD # 全てのプロセスで共有されるコミュニケータ
+rank = COMM.Get_rank() # 自プロセスのランク番号
 LEADER_RANK = 0 # リーダーの rank 番号
-ALL_MEMBER_SIZE = COMM.Get_size() # 並列度
+ALL_MEMBER_SIZE = COMM.Get_size() # 並列度（厳密にはそのコミュニケータに所属するプロセスの総数）
 START_VERTEX = 0 # 開始頂点
 
 def main():
@@ -78,5 +78,6 @@ def main():
     if rank == LEADER_RANK:
         print(*dist[1:])
 
+# エントリポイント
 if __name__ == "__main__":
     main()

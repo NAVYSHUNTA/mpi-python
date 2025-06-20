@@ -3,19 +3,21 @@ import time
 import math
 
 # グローバル変数
-COMM = MPI.COMM_WORLD
-rank = COMM.Get_rank()
+COMM = MPI.COMM_WORLD # 全てのプロセスで共有されるコミュニケータ
+rank = COMM.Get_rank() # 自プロセスのランク番号
 LEADER_RANK = 0 # リーダーの rank 番号
-ALL_MEMBER_SIZE = COMM.Get_size()
+ALL_MEMBER_SIZE = COMM.Get_size() # 並列度（厳密にはそのコミュニケータに所属するプロセスの総数）
 WORK_MEMBER_SIZE = ALL_MEMBER_SIZE - 1 # 並列度（メンバーに指示を出すリーダー自身を除く）
 
 # 素数判定
+# 入力値を N としたとき、この素数判定アルゴリズムの時間計算量は O(N)
+# 時間計算量が O(√N) の素数判定アルゴリズムもあるが今回は簡潔さを重視して O(N) の方を採用した
 def is_prime(target):
     if target < 2:
-        return False
+        return False # 2 未満は素数ではないので False を返す
     for div in range(2, target):
         if target % div == 0:
-            return False
+            return False # 割り切れる場合は素数ではないので False を返す
     return True
 
 # 1 から n までの素数の個数を数え上げ（計算の指示）
@@ -44,8 +46,16 @@ def count_prime():
 
             print(f"わたしはメンバー {rank} で、{left} 以上 {right - 1} 以下の素数を数えますね！", flush = True) # TODO: この行はスパコンで時間計測する前に削除する
             for num in range(left, right):
-                count += is_prime(num) # Python では True の場合 1, False の場合 0 として扱われる
+                count += is_prime(num) # int 型と bool 型を足したとき、Python では True, False がそれぞれ 1, 0 として扱われるのでこれを利用してカウントする
             COMM.send(count, dest = LEADER_RANK, tag = repeat)
+
+# 小数点以下を切り捨てたミリ秒単位の実行時間（実時間）を返す
+def get_total_time_ms_floor(start_time):
+    end_time = time.perf_counter()
+    total_time_second = end_time - start_time
+    total_time_ms = 1000 * total_time_second # 秒からミリ秒に変換
+    total_time_ms_floor = int(total_time_ms) # 小数点以下を切り捨て
+    return total_time_ms_floor
 
 def main():
     start_time = None
@@ -66,11 +76,9 @@ def main():
             for repeat in range(1, ALL_MEMBER_SIZE):
                 total_count_prime += COMM.recv(source = member, tag = repeat)
 
-        end_time = time.perf_counter()
-        total_time_second = end_time - start_time
-        total_time_ms = 1000 * total_time_second # 秒からミリ秒に変換
-        total_time_ms_floor = int(total_time_ms) # 小数点以下を切り捨て
+        total_time_ms_floor = get_total_time_ms_floor(start_time)
         print(n, total_count_prime, total_time_ms_floor) # 入力値, 1 から n までの素数の個数, 実行時間（ミリ秒）
 
+# エントリポイント
 if __name__ == "__main__":
     main()
