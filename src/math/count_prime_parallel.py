@@ -19,22 +19,8 @@ def is_prime(target):
             return False # 割り切れる場合は素数ではないので False を返す
     return True
 
-# 小数点以下を切り捨てたミリ秒単位の実行時間（実時間）を返す
-def get_total_time_ms_floor(start_time):
-    end_time = time.perf_counter()
-    total_time_second = end_time - start_time
-    total_time_ms = 1000 * total_time_second # 秒からミリ秒に変換
-    total_time_ms_floor = int(total_time_ms) # 小数点以下を切り捨て
-    return total_time_ms_floor
-
-def main():
-    n = None
-    start_time = None
-    if rank == LEADER_RANK:
-        n = int(input()) # 入力を受け取って整数に変換
-        start_time = time.perf_counter()
-
-    n = COMM.bcast(n, root = LEADER_RANK) # 全てのメンバーに n を配布する
+# 1 から n までの整数に含まれる素数の個数を数え上げる
+def count_prime(n):
     one_step_range = math.ceil(n / min(n, SIZE ** 2)) # 各プロセスが調査する整数の範囲の幅
     count_prime_self = 0 # 自プロセスがカウントした素数の個数
 
@@ -55,6 +41,25 @@ def main():
 
     # 各プロセスが数え上げた素数の個数の総和をリーダーに渡す
     total_count_prime = COMM.reduce(count_prime_self, op = MPI.SUM, root = LEADER_RANK)
+    return total_count_prime
+
+# 小数点以下を切り捨てたミリ秒単位の実行時間（実時間）を返す
+def get_total_time_ms_floor(start_time):
+    end_time = time.perf_counter()
+    total_time_second = end_time - start_time
+    total_time_ms = 1000 * total_time_second # 秒からミリ秒に変換
+    total_time_ms_floor = int(total_time_ms) # 小数点以下を切り捨て
+    return total_time_ms_floor
+
+def main():
+    n = None
+    start_time = None
+    if rank == LEADER_RANK:
+        n = int(input()) # 入力を受け取って整数に変換
+        start_time = time.perf_counter()
+
+    n = COMM.bcast(n, root = LEADER_RANK) # 全てのメンバーに n を配布する
+    total_count_prime = count_prime(n) # 素数の個数を数える
 
     # 計算結果の出力
     if rank == LEADER_RANK:
