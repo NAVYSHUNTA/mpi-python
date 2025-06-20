@@ -4,15 +4,12 @@ from mpi4py import MPI
 COMM = MPI.COMM_WORLD
 rank = COMM.Get_rank()
 LEADER_RANK = 0 # リーダーの rank 番号
-ALL_MEMBER_SIZE = COMM.Get_size()
-WORK_MEMBER_SIZE = ALL_MEMBER_SIZE - 1 # 並列度（メンバーに指示を出すリーダー自身を除く）
-START_VERTEX = 0
-
-# 並列 BFS（計算の指示）
-def calc_order(graph, all_dist):
-    pass
+ALL_MEMBER_SIZE = COMM.Get_size() # 並列度
+START_VERTEX = 0 # 開始頂点
 
 def main():
+    n = m = graph = None
+
     # ユーザーから受け取った入力をもとにリーダーがメンバーへ計算を指示する
     if rank == LEADER_RANK:
         n, m = map(int, input().split())
@@ -27,8 +24,10 @@ def main():
             graph[u].append(v)
             graph[v].append(u)
 
-        # 全員にグラフを配布
-        COMM.Bcast(graph, root = LEADER_RANK)
+    # 全員にグラフを配布
+    n = COMM.bcast(n, root = LEADER_RANK)
+    m = COMM.bcast(m, root = LEADER_RANK)
+    graph = COMM.bcast(graph, root = LEADER_RANK)
 
     COMM.Barrier() # 全員がグラフを受け取るまで待機
 
@@ -54,7 +53,7 @@ def main():
                     continue
                 dist[nv] = dist_level + 1
                 local_next_vertex_set.add(nv)
-        all_next_vertex_list = COMM.Allgather(list(local_next_vertex_set))
+        all_next_vertex_list = COMM.allgather(list(local_next_vertex_set))
 
         next_vertex_set = set()
         for next_vertex_list in all_next_vertex_list:
@@ -71,8 +70,13 @@ def main():
 
         COMM.Barrier()
 
+    # 訪問できない頂点の距離を -1 にする
+    for i in range(n):
+        if dist[i] == INF:
+            dist[i] = -1
+
     if rank == LEADER_RANK:
-        print(*dist)
+        print(*dist[1:])
 
 if __name__ == "__main__":
     main()
