@@ -31,6 +31,8 @@ def main():
     start_time = time.perf_counter()
     total_count_prime = count_prime(n) # 素数の個数を数える
     total_time_ms_floor = get_total_time_ms_floor(start_time)
+
+    # 計算結果の出力
     print(n, total_count_prime, total_time_ms_floor) # 入力値, 1 から n までの素数の個数, 実行時間（ミリ秒）
 
 # エントリポイント

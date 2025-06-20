@@ -75,6 +75,7 @@ def main():
         if dist[i] == INF:
             dist[i] = -1
 
+    # 計算結果の出力
     if rank == LEADER_RANK:
         print(*dist[1:])
 

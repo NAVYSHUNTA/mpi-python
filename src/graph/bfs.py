@@ -49,6 +49,7 @@ def main():
             print("入力が不正です")
             exit()
 
+    # 計算結果の出力
     print("頂点 0 から頂点 i へ辿るのに必要な辺数は次の通りです（辿れない場合は -1 とします）")
     dist = bfs(n, m, edges)
     print(*dist)
