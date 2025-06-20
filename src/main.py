@@ -1,11 +1,13 @@
 from mpi4py import MPI
 
+# グローバル変数
+COMM = MPI.COMM_WORLD
+rank = COMM.Get_rank()
+SIZE = COMM.Get_size()
+
 def main():
-    comm = MPI.COMM_WORLD
-    rank = comm.Get_rank()
-    size = comm.Get_size()
+    print(f"こんにちは！並列度は {SIZE} で、私はランク {rank} を担当しています！")
 
-    print(f"Hello, world! from rank {rank} out of {size}")
-
+# エントリポイント
 if __name__ == "__main__":
     main()
