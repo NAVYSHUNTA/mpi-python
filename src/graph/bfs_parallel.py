@@ -10,15 +10,7 @@ START_VERTEX = 0
 
 # 並列 BFS（計算の指示）
 def calc_order(graph, all_dist):
-    if rank == LEADER_RANK:
-        for nv in graph[START_VERTEX]:
-            all_dist[nv] = 1
-            member = (nv % WORK_MEMBER_SIZE) + 1
-            COMM.isend([nv, 1], dest = member, tag = 1)
-
-    for _ in range(1, ALL_MEMBER_SIZE):
-        result = COMM.irecv(source = LEADER_RANK, tag = 1)
-        print(result)
+    pass
 
 def main():
     # ユーザーから受け取った入力をもとにリーダーがメンバーへ計算を指示する
@@ -35,12 +27,52 @@ def main():
             graph[u].append(v)
             graph[v].append(u)
 
-        # 頂点 0 からの距離を配列で管理
-        INF = m + 1
-        all_dist = [INF] * n
-        all_dist[START_VERTEX] = 0
-        calc_order(graph, all_dist)
-        print(*all_dist)
+        # 全員にグラフを配布
+        COMM.Bcast(graph, root = LEADER_RANK)
+
+    COMM.Barrier() # 全員がグラフを受け取るまで待機
+
+    # 頂点 0 からの距離を配列で管理
+    INF = m + 1
+    dist = [INF] * n
+    dist[START_VERTEX] = 0
+
+    dist_level = 0
+    cur_vertex_set = set([START_VERTEX])
+    while True:
+        local_next_vertex_set = set()
+        target_vertex = list(cur_vertex_set)
+
+        local_target_vertex = [] # 自分が担当する頂点のリスト
+        for i, vertex in enumerate(target_vertex):
+            if i % ALL_MEMBER_SIZE == rank:
+                local_target_vertex.append(vertex)
+
+        for v in local_target_vertex:
+            for nv in graph[v]:
+                if dist[nv] <= dist_level + 1:
+                    continue
+                dist[nv] = dist_level + 1
+                local_next_vertex_set.add(nv)
+        all_next_vertex_list = COMM.Allgather(list(local_next_vertex_set))
+
+        next_vertex_set = set()
+        for next_vertex_list in all_next_vertex_list:
+            next_vertex_set.update(next_vertex_list)
+
+        for next_vertex in next_vertex_set:
+            dist[next_vertex] = dist_level + 1
+
+        if not next_vertex_set:
+            break
+
+        cur_vertex_set = next_vertex_set
+        dist_level += 1
+
+        COMM.Barrier()
+
+    if rank == LEADER_RANK:
+        print(*dist)
 
 if __name__ == "__main__":
     main()
