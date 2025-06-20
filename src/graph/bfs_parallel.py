@@ -10,7 +10,7 @@ START_VERTEX = 0 # 開始頂点
 def main():
     n = m = graph = None
 
-    # ユーザーから受け取った入力をもとにリーダーがメンバーへ計算を指示する
+    # 入力を受け取る
     if rank == LEADER_RANK:
         n, m = map(int, input().split())
         edges = []
@@ -24,12 +24,12 @@ def main():
             graph[u].append(v)
             graph[v].append(u)
 
-    # 全員にグラフを配布
+    # 入力で受け取った情報を全メンバーに配布
     n = COMM.bcast(n, root = LEADER_RANK)
     m = COMM.bcast(m, root = LEADER_RANK)
     graph = COMM.bcast(graph, root = LEADER_RANK)
 
-    COMM.Barrier() # 全員がグラフを受け取るまで待機
+    COMM.Barrier() # 全メンバーがグラフを受け取るまで待機
 
     # 頂点 0 からの距離を配列で管理
     INF = m + 1
@@ -70,7 +70,7 @@ def main():
 
         COMM.Barrier()
 
-    # 訪問できない頂点の距離を -1 にする
+    # 訪問できない頂点の距離を -1 とする
     for i in range(n):
         if dist[i] == INF:
             dist[i] = -1

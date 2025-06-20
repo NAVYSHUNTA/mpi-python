@@ -27,7 +27,9 @@ def get_total_time_ms_floor(start_time):
     return total_time_ms_floor
 
 def main():
-    n = int(input()) # 入力を受け取って整数に変換
+    # 入力を受け取る
+    n = int(input())
+
     start_time = time.perf_counter()
     total_count_prime = count_prime(n) # 素数の個数を数える
     total_time_ms_floor = get_total_time_ms_floor(start_time)

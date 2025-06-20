@@ -54,11 +54,14 @@ def get_total_time_ms_floor(start_time):
 def main():
     n = None
     start_time = None
+
+    # 入力を受け取る
     if rank == LEADER_RANK:
-        n = int(input()) # 入力を受け取って整数に変換
+        n = int(input())
+
         start_time = time.perf_counter()
 
-    n = COMM.bcast(n, root = LEADER_RANK) # 全てのメンバーに n を配布する
+    n = COMM.bcast(n, root = LEADER_RANK) # 全メンバーに n を配布する
     total_count_prime = count_prime(n) # 素数の個数を数える
 
     # 計算結果の出力
