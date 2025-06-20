@@ -1,6 +1,5 @@
 from collections import deque
 
-# BFS
 def bfs(n, m, edges):
     # グラフを用意する
     graph = [[] for _ in range(n)]
@@ -14,10 +13,10 @@ def bfs(n, m, edges):
     dist = [INF] * n
     dist[START_VERTEX] = 0
 
-    # キューを用意する
+    # BFS を行うためにキューを用意する
     queue = deque([START_VERTEX])
 
-    # bfs
+    # BFS
     while queue:
         v = queue.popleft()
         for nv in graph[v]:
@@ -26,31 +25,21 @@ def bfs(n, m, edges):
             dist[nv] = dist[v] + 1
             queue.append(nv)
 
-    # 訪問できない頂点の距離を -1 にする
+    # 訪問できない頂点の距離を -1 とする
     for i in range(n):
         if dist[i] == INF:
             dist[i] = -1
     return dist[1:]
 
 def main():
-    print("n 頂点 m 辺からなる単純グラフの頂点 0 から頂点 i へ辿るのに必要な辺数の最小値を求めます")
-    print("2 以上の正整数 n と 1 以上の正整数 m を空白区切りで入力してください: ", end="")
-    n, m = map(int, input().split()) # 入力を受け取って整数に変換
-    if n < 2 or m < 1:
-        print("入力が不正です")
-        exit()
-
-    print("次に m 行に渡って辺の情報を空白区切りで入力してください: ", end="")
+    # 入力を受け取る
+    n, m = map(int, input().split())
     edges = []
     for _ in range(m):
         uv = list(map(int, input().split()))
         edges.append(uv)
-        if not (0 <= uv[0] < uv[1] <= n - 1):
-            print("入力が不正です")
-            exit()
 
     # 計算結果の出力
-    print("頂点 0 から頂点 i へ辿るのに必要な辺数は次の通りです（辿れない場合は -1 とします）")
     dist = bfs(n, m, edges)
     print(*dist)
 
