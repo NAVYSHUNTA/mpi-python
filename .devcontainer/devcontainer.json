@@ -1,12 +1,17 @@
 {
+    // Dev Container の表示名
     "name": "mpi-python",
+    // コンテナの構築方法
     "build": {
         "dockerfile": "./Dockerfile"
     },
+    // コンテナ内で開くディレクトリのパス
     "workspaceFolder": "/workspace",
+    // ローカルのワークスペースフォルダをコンテナ内のどこにマウントするかの設定
     "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
     "customizations": {
         "vscode": {
+            // コンテナ内で使う VSCode の拡張機能
             "extensions": [
                 "oderwat.indent-rainbow",
                 "ms-python.python"
