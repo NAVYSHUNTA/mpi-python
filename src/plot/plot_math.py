@@ -16,7 +16,7 @@ with open(INPUT_DATA_PATH, "r") as file:
         x_input_size.append(n)
         y_time.append(time)
 
-plt.plot(x_input_size, y_time, "o") # 横軸, 縦軸, 点の種類
+plt.plot(x_input_size, y_time, marker = "o", linestyle = "dotted") # 横軸, 縦軸, 点の種類, 線の種類
 plt.xscale("log") # x 軸は対数スケール
 plt.yscale("log") # y 軸は対数スケール
 plt.title(f"{CPU_NAME} での実験結果")
