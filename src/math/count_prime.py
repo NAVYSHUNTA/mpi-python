@@ -1,3 +1,4 @@
+import math
 import time
 
 # 素数判定
@@ -18,13 +19,13 @@ def count_prime(n):
         count += is_prime(num) # int 型と bool 型を足したとき、Python では True, False がそれぞれ 1, 0 として扱われるのでこれを利用してカウントする
     return count
 
-# 小数点以下を切り捨てたミリ秒単位の実行時間（実時間）を返す
-def get_total_time_ms_floor(start_time):
+# 小数点以下を切り上げたミリ秒単位の実行時間（実時間）を返す
+def get_total_time_ms_ceil(start_time):
     end_time = time.perf_counter()
     total_time_second = end_time - start_time
     total_time_ms = 1000 * total_time_second # 秒からミリ秒に変換
-    total_time_ms_floor = int(total_time_ms) # 小数点以下を切り捨て
-    return total_time_ms_floor
+    total_time_ms_ceil = math.ceil(total_time_ms) # 小数点以下を切り上げ
+    return total_time_ms_ceil
 
 def main():
     # 入力を受け取る
@@ -32,10 +33,10 @@ def main():
 
     start_time = time.perf_counter()
     total_count_prime = count_prime(n) # 素数の個数を数える
-    total_time_ms_floor = get_total_time_ms_floor(start_time)
+    total_time_ms_ceil = get_total_time_ms_ceil(start_time)
 
     # 計算結果の出力
-    print(n, total_count_prime, total_time_ms_floor) # 入力値, 1 から n までの素数の個数, 実行時間（ミリ秒）
+    print(n, total_count_prime, total_time_ms_ceil) # 入力値, 1 から n までの素数の個数, 実行時間（ミリ秒）
 
 # エントリポイント
 if __name__ == "__main__":
