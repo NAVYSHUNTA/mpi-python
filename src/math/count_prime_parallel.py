@@ -37,7 +37,7 @@ def count_prime(n):
         # 自プロセスは start_num 以上 end_num 以下の整数に含まれる素数の個数を数える
         print(f"わたしはメンバー {rank} で、{start_num} 以上 {end_num} 以下の整数に含まれる素数の個数を数えますね！", flush = True) # TODO: この行はスパコンで時間計測する前に削除する
         for num in range(start_num, end_num + 1):
-            count_prime_self += is_prime(num)
+            count_prime_self += is_prime(num) # int 型と bool 型を足したとき、Python では True, False がそれぞれ 1, 0 として扱われるのでこれを利用してカウントする
 
     # 各プロセスが数え上げた素数の個数の総和をリーダーに渡す
     total_count_prime = COMM.reduce(count_prime_self, op = MPI.SUM, root = LEADER_RANK)
