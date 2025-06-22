@@ -1,5 +1,9 @@
 from collections import deque
 
+# グローバル変数
+START_VERTEX = 0 # 開始頂点
+UNVISITED_DIST = -1 # 訪問できない頂点までの距離は -1 とする
+
 def bfs(n, m, edges):
     # グラフを用意する
     graph = [[] for _ in range(n)]
@@ -8,28 +12,30 @@ def bfs(n, m, edges):
         graph[v].append(u)
 
     # 頂点 0 からの距離を配列で管理
-    START_VERTEX = 0
-    INF = m + 1
-    dist = [INF] * n
-    dist[START_VERTEX] = 0
+    INF = m + 1 # 訪問できるのであれば開始頂点からの距離は m 以下なので m + 1 を無限大として扱える
+    dist = [INF] * n # 長さが n で、初期値が無限大の配列を用意する
+    dist[START_VERTEX] = 0 # 開始頂点から開始頂点までの距離は 0
 
-    # BFS を行うためにキューを用意する
+    # BFS を行うために queue を用意する（Python では deque の方が高速なので敢えて deque を使っている）
+    # deque と queue の対応は以下の通り
+    # deque の popleft() は queue の pop() に相当する
+    # deque の append() は queue の append() に相当する
     queue = deque([START_VERTEX])
 
     # BFS
-    while queue:
-        v = queue.popleft()
-        for nv in graph[v]:
+    while queue: # queue が空になるまで繰り返す
+        v = queue.popleft() # queue の先頭から頂点を取り出す
+        for nv in graph[v]: # v に隣接している頂点の集合が graph[v]
             if dist[nv] <= dist[v] + 1:
-                continue
+                continue # 距離が更新されない場合はスキップする
             dist[nv] = dist[v] + 1
-            queue.append(nv)
+            queue.append(nv) # queue の末尾に距離が更新された頂点を追加する
 
-    # 訪問できない頂点の距離を -1 とする
-    for i in range(n):
-        if dist[i] == INF:
-            dist[i] = -1
-    return dist[1:]
+    # 訪問できない頂点の距離を INF から UNVISITED_DIST に変更する
+    for v in range(n):
+        if dist[v] == INF:
+            dist[v] = UNVISITED_DIST
+    return dist[1:] # 開始頂点以外の距離を返す
 
 def main():
     # 入力を受け取る
