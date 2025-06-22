@@ -13,11 +13,11 @@ def main():
 
     # 入力を受け取る
     if rank == LEADER_RANK:
-        n, m = map(int, input().split())
-        edges = []
-        for _ in range(m):
-            uv = list(map(int, input().split()))
-            edges.append(uv)
+        # ファイルからグラフの情報を読み込む
+        with open("input_data/random_graph.txt", "r") as file:
+            lines = file.readlines()
+            n, m = map(int, lines[0].split())
+            edges = [list(map(int, line.split())) for line in lines[1:m + 1]]
 
         # グラフを用意する
         graph = [[] for _ in range(n)]
