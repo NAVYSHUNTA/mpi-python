@@ -11,7 +11,7 @@ def bfs(n, m, edges):
         graph[u].append(v)
         graph[v].append(u)
 
-    # 頂点 0 からの距離を配列で管理
+    # 開始頂点からの距離を配列で管理
     INF = m + 1 # 訪問できるのであれば開始頂点からの距離は m 以下なので m + 1 を無限大として扱える
     dist = [INF] * n # 長さが n で、初期値が無限大の配列を用意する
     dist[START_VERTEX] = 0 # 開始頂点から開始頂点までの距離は 0
