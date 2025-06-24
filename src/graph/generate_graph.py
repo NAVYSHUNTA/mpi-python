@@ -1,15 +1,6 @@
 import sys
 import random
 
-# グラフの名称と頂点数、辺数をコマンドライン引数から取得
-graph_name, n, m = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
-
-# 制約違反のチェック
-assert 2 <= n <= 10 ** 4, "頂点数が制約に違反しています"
-assert 1 <= m <= n * (n - 1) // 2, "辺数が制約に違反しています"
-assert graph_name in ["tree", "line", "complete", "random"], "グラフの名称が不正です"
-
-
 # グラフの生成
 def generate_graph(graph_name, n, m):
     if graph_name == "tree":
@@ -36,22 +27,23 @@ def generate_graph(graph_name, n, m):
             edges.append(new_edge)
             exist_vertex_set.add(nv)
             exist_vertex.append(nv)
-        return edges
+        return [n, m, edges]
 
     elif graph_name == "line":
         assert n - 1 >= m, "単純道は m が n - 1 以下である必要があります"
         # 単純道を生成
         edges = [(i, i + 1) for i in range(m)]
-        return edges
+        return [n, m, edges]
 
     elif graph_name == "complete":
-        assert m == n * (n - 1) // 2, "完全グラフは m が n(n - 1) / 2 である必要があります"
+        m = n * (n - 1) // 2
+
         # 完全グラフを生成
         edges = []
         for v in range(n):
             for nv in range(v + 1, n):
                 edges.append([v, nv])
-        return edges
+        return [n, m, edges]
 
     elif graph_name == "random":
         # ランダムグラフを生成
@@ -65,23 +57,31 @@ def generate_graph(graph_name, n, m):
                 continue
             exist_edge_set.add(new_edge)
             edges.append(new_edge)
-        return edges
+        return [n, m, edges]
 
 
 def main():
+    # グラフの名称と頂点数、辺数をコマンドライン引数から取得
+    graph_name, n, m = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
+
+    # 制約違反のチェック
+    assert 2 <= n <= 10 ** 4, "頂点数が制約に違反しています"
+    assert 1 <= m <= n * (n - 1) // 2, "辺数が制約に違反しています"
+    assert graph_name in ["tree", "line", "complete", "random"], "グラフの名称が不正です"
+
     # グラフを生成
-    edges = generate_graph(graph_name, n, m)
+    n, m, edges = generate_graph(graph_name, n, m)
 
     # 生成したグラフの情報をテキストファイルに出力
-    with open(f"input_data/{graph_name}_graph.txt", "w") as file:
+    with open(f"input_data/{graph_name}_graph_{n}_{m}.txt", "w") as file:
         file.write(f"{n} {m}\n")
         for u, v in edges:
             file.write(f"{u} {v}\n")
             assert 0 <= u < v <= n - 1, "辺の頂点番号が制約に違反しています"
+    print(f"{graph_name} グラフを生成しました: {n} 頂点, {m} 辺")
+    print(f"出力ファイル: input_data/{graph_name}_graph_{n}_{m}.txt")
 
 
 # エントリポイント
 if __name__ == "__main__":
     main()
-    print(f"{graph_name} グラフを生成しました: {n} 頂点, {m} 辺")
-    print(f"出力ファイル: input_data/{graph_name}_graph.txt")
