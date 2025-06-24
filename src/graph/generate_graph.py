@@ -65,7 +65,7 @@ def main():
     graph_name, n, m = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
 
     # 制約違反のチェック
-    assert 2 <= n <= 10 ** 4, "頂点数が制約に違反しています"
+    assert 2 <= n <= 10 ** 3, "頂点数が制約に違反しています"
     assert 1 <= m <= n * (n - 1) // 2, "辺数が制約に違反しています"
     assert graph_name in ["tree", "line", "complete", "random"], "グラフの名称が不正です"
 
