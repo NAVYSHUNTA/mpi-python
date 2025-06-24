@@ -2,10 +2,10 @@ from collections import deque
 import math
 import time
 
-
 # グローバル変数
 START_VERTEX = 0 # 開始頂点
 UNVISITED_DIST = -1 # 訪問できない頂点までの距離は -1 とする
+
 
 def bfs(n, m, edges):
     # グラフを用意する
@@ -40,6 +40,7 @@ def bfs(n, m, edges):
             dist[v] = UNVISITED_DIST
     return dist[1:] # 開始頂点以外の距離を返す
 
+
 # 小数点以下を切り上げたミリ秒単位の実行時間（実時間）を返す
 def get_total_time_ms_ceil(start_time):
     end_time = time.perf_counter()
@@ -48,6 +49,7 @@ def get_total_time_ms_ceil(start_time):
     total_time_ms_ceil = math.ceil(total_time_ms) # 小数点以下を切り上げ
     return total_time_ms_ceil
 
+
 def main():
     # 入力を受け取る
     n, m = map(int, input().split())
@@ -55,12 +57,14 @@ def main():
     for _ in range(m):
         uv = list(map(int, input().split()))
         edges.append(uv)
-    # 時間計測開始
+
     start_time = time.perf_counter()
-    # 計算結果の出力
     dist = bfs(n, m, edges)
-    total_time_ms_ceil = get_total_time_ms_ceil(start_time) 
+    total_time_ms_ceil = get_total_time_ms_ceil(start_time)
+
+    # 計算結果の出力
     print(*dist, total_time_ms_ceil) # 距離の配列, 実行時間（ミリ秒）
+
 
 # エントリポイント
 if __name__ == "__main__":

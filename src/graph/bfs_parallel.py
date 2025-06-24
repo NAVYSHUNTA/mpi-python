@@ -8,6 +8,7 @@ SIZE = COMM.Get_size() # 並列度（厳密にはそのコミュニケータに�
 START_VERTEX = 0 # 開始頂点
 UNVISITED_DIST = -1 # 訪問できない頂点までの距離は -1 とする
 
+
 def main():
     n = m = graph = None
 
@@ -88,6 +89,7 @@ def main():
     # 計算結果の出力
     if rank == LEADER_RANK:
         print(*dist[1:])
+
 
 # エントリポイント
 if __name__ == "__main__":

@@ -12,12 +12,14 @@ def is_prime(target):
             return False # 割り切れる場合は素数ではないので False を返す
     return True
 
+
 # 1 から n までの整数に含まれる素数の個数を数え上げる
 def count_prime(n):
     count = 0
     for num in range(1, n + 1):
         count += is_prime(num) # int 型と bool 型を足したとき、Python では True, False がそれぞれ 1, 0 として扱われるのでこれを利用してカウントする
     return count
+
 
 # 小数点以下を切り上げたミリ秒単位の実行時間（実時間）を返す
 def get_total_time_ms_ceil(start_time):
@@ -26,6 +28,7 @@ def get_total_time_ms_ceil(start_time):
     total_time_ms = 1000 * total_time_second # 秒からミリ秒に変換
     total_time_ms_ceil = math.ceil(total_time_ms) # 小数点以下を切り上げ
     return total_time_ms_ceil
+
 
 def main():
     DIGIT_MAX = 7 # 実験で扱う n の最大桁数
@@ -41,6 +44,7 @@ def main():
         # 計算結果をテキストファイルに出力
         with open(OUTPUT_FILE_PATH, mode = "a") as file:
             file.write(f"{n} {total_count_prime} {total_time_ms_ceil}\n") # 入力値, 1 から n までの素数の個数, 実行時間（ミリ秒）
+
 
 # エントリポイント
 if __name__ == "__main__":

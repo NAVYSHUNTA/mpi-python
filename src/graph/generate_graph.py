@@ -9,6 +9,7 @@ assert 2 <= n <= 10 ** 4, "頂点数が制約に違反しています"
 assert 1 <= m <= n * (n - 1) // 2, "辺数が制約に違反しています"
 assert graph_name in ["tree", "line", "complete", "random"], "グラフの名称が不正です"
 
+
 # グラフの生成
 def generate_graph(graph_name, n, m):
     if graph_name == "tree":
@@ -51,6 +52,7 @@ def generate_graph(graph_name, n, m):
             for nv in range(v + 1, n):
                 edges.append([v, nv])
         return edges
+
     elif graph_name == "random":
         # ランダムグラフを生成
         edges = []
@@ -65,6 +67,7 @@ def generate_graph(graph_name, n, m):
             edges.append(new_edge)
         return edges
 
+
 def main():
     # グラフを生成
     edges = generate_graph(graph_name, n, m)
@@ -75,6 +78,7 @@ def main():
         for u, v in edges:
             file.write(f"{u} {v}\n")
             assert 0 <= u < v <= n - 1, "辺の頂点番号が制約に違反しています"
+
 
 # エントリポイント
 if __name__ == "__main__":
