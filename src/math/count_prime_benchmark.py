@@ -29,7 +29,8 @@ def get_total_time_ms_ceil(start_time):
 
 def main():
     DIGIT_MAX = 7 # 実験で扱う n の最大桁数
-    OUTPUT_FILE_PATH = "result/output.txt"
+    OUTPUT_FILE_PATH = "output.txt" # スーパーコンピュータで実行する場合
+    # OUTPUT_FILE_PATH = "result/output.txt" # ローカルで実行する場合
     all_n = [10 ** i for i in range(DIGIT_MAX)] # 10^0, 10^1, ..., 10^6
 
     for n in all_n:
