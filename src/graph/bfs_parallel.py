@@ -1,4 +1,6 @@
 from mpi4py import MPI
+import math
+import time
 
 # グローバル変数
 COMM = MPI.COMM_WORLD # 全てのプロセスで共有されるコミュニケータ
@@ -8,6 +10,13 @@ SIZE = COMM.Get_size() # 並列度（厳密にはそのコミュニケータに�
 START_VERTEX = 0 # 開始頂点
 UNVISITED_DIST = -1 # 訪問できない頂点までの距離は -1 とする
 
+# 小数点以下を切り上げたミリ秒単位の実行時間（実時間）を返す
+def get_total_time_ms_ceil(start_time):
+    end_time = time.perf_counter() # 現在の時間を取得
+    total_time_second = end_time - start_time # 経過時間を計算
+    total_time_ms = 1000 * total_time_second # 秒からミリ秒に変換
+    total_time_ms_ceil = math.ceil(total_time_ms) # 小数点以下を切り上げ
+    return total_time_ms_ceil
 
 def main():
     n = m = graph = None
@@ -15,7 +24,7 @@ def main():
     # 入力を受け取る
     if rank == LEADER_RANK:
         # ファイルからグラフの情報を読み込む
-        with open("input_data/random_graph.txt", "r") as file:
+        with open("input_data/line_graph_1000_999.txt", "r") as file:
             lines = file.readlines()
             n, m = map(int, lines[0].split())
             edges = [list(map(int, line.split())) for line in lines[1:m + 1]]
@@ -32,6 +41,9 @@ def main():
     graph = COMM.bcast(graph, root = LEADER_RANK)
 
     COMM.Barrier() # 全メンバーがグラフを受け取るまで待機
+
+    # 時間計測開始
+    start_time = time.perf_counter() # 現在の時間を取得
 
     # 開始頂点からの距離を配列で管理
     INF = m + 1 # 訪問できるのであれば開始頂点からの距離は m 以下なので m + 1 を無限大として扱える
@@ -88,7 +100,8 @@ def main():
 
     # 計算結果の出力
     if rank == LEADER_RANK:
-        print(*dist[1:])
+        total_time_ms_ceil = get_total_time_ms_ceil(start_time)
+        print(*dist[1:], total_time_ms_ceil) # 距離の配列, 実行時間（ミリ秒）
 
 
 # エントリポイント
