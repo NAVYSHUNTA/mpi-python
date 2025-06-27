@@ -3,9 +3,15 @@ import random
 
 # グラフの生成
 def generate_graph(graph_name, n, m):
-    if graph_name == "tree":
-        assert n - 1 >= m, "木は m が n - 1 以下である必要があります"
+    if graph_name == "line":
+        # 単純道を生成
+        m = min(m, n - 1) # m が n - 1 を超えないように調整
+        edges = [(i, i + 1) for i in range(m)]
+        return [n, m, edges]
+
+    elif graph_name == "tree":
         # 木を生成
+        m = min(m, n - 1) # m が n - 1 を超えないように調整
         edges = []
         exist_edge_set = set() # 既存の辺を管理する集合
         exist_vertex_set = {0} # 既存の頂点を管理する集合
@@ -29,10 +35,19 @@ def generate_graph(graph_name, n, m):
             exist_vertex.append(nv)
         return [n, m, edges]
 
-    elif graph_name == "line":
-        assert n - 1 >= m, "単純道は m が n - 1 以下である必要があります"
-        # 単純道を生成
-        edges = [(i, i + 1) for i in range(m)]
+    elif graph_name == "random":
+        # ランダムグラフを生成
+        edges = []
+        m = random.randint(1, n * (n - 1) // 2)
+        exist_edge_set = set()
+        while len(edges) < m:
+            v = random.randint(0, n - 2)
+            nv = random.randint(v + 1, n - 1)
+            new_edge = (v, nv)
+            if new_edge in exist_edge_set:
+                continue
+            exist_edge_set.add(new_edge)
+            edges.append(new_edge)
         return [n, m, edges]
 
     elif graph_name == "complete":
@@ -45,32 +60,19 @@ def generate_graph(graph_name, n, m):
                 edges.append([v, nv])
         return [n, m, edges]
 
-    elif graph_name == "random":
-        # ランダムグラフを生成
-        edges = []
-        exist_edge_set = set()
-        while len(edges) < m:
-            v = random.randint(0, n - 2)
-            nv = random.randint(v + 1, n - 1)
-            new_edge = (v, nv)
-            if new_edge in exist_edge_set:
-                continue
-            exist_edge_set.add(new_edge)
-            edges.append(new_edge)
-        return [n, m, edges]
-
 
 def main():
     # グラフの名称と頂点数、辺数をコマンドライン引数から取得
-    graph_name, n, m = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
-
-    # 制約違反のチェック
-    assert 2 <= n <= 10 ** 3, "頂点数が制約に違反しています"
-    assert 1 <= m <= n * (n - 1) // 2, "辺数が制約に違反しています"
-    assert graph_name in ["tree", "line", "complete", "random"], "グラフの名称が不正です"
+    graph_name, n = sys.argv[1], int(sys.argv[2])
+    m = int(sys.argv[3]) if len(sys.argv) == 4 else n ** 2 # 辺数は未入力でも良い
 
     # グラフを生成
     n, m, edges = generate_graph(graph_name, n, m)
+
+    # 制約違反のチェック
+    assert graph_name in ["line", "tree", "random", "complete"], "グラフの名称が不正です"
+    assert 2 <= n <= 10 ** 3, "頂点数が制約に違反しています"
+    assert 1 <= m <= n * (n - 1) // 2, "辺数が制約に違反しています"
 
     # 生成したグラフの情報をテキストファイルに出力
     with open(f"input_data/{graph_name}_graph_{n}_{m}.txt", "w") as file:
