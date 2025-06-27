@@ -38,7 +38,6 @@ def generate_graph(graph_name, n, m):
     elif graph_name == "random":
         # ランダムグラフを生成
         edges = []
-        m = random.randint(1, n * (n - 1) // 2)
         exist_edge_set = set()
         while len(edges) < m:
             v = random.randint(0, n - 2)

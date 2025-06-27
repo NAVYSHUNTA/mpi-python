@@ -24,7 +24,6 @@ def main():
     # 入力を受け取る
     if rank == LEADER_RANK:
         # ファイルからグラフの情報を読み込む
-        # with open("input_data/line_graph_1000_999.txt", "r") as file:
         with open("input_data/complete_graph_1000_499500.txt", "r") as file:
             lines = file.readlines()
             n, m = map(int, lines[0].split())
