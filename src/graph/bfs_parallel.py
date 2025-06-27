@@ -24,10 +24,14 @@ def main():
     # 入力を受け取る
     if rank == LEADER_RANK:
         # ファイルからグラフの情報を読み込む
-        with open("input_data/line_graph_1000_999.txt", "r") as file:
+        # with open("input_data/line_graph_1000_999.txt", "r") as file:
+        with open("input_data/complete_graph_1000_499500.txt", "r") as file:
             lines = file.readlines()
             n, m = map(int, lines[0].split())
             edges = [list(map(int, line.split())) for line in lines[1:m + 1]]
+
+        # 時間計測開始
+        start_time = time.perf_counter() # 現在の時間を取得
 
         # グラフを用意する
         graph = [[] for _ in range(n)]
@@ -41,9 +45,6 @@ def main():
     graph = COMM.bcast(graph, root = LEADER_RANK)
 
     COMM.Barrier() # 全メンバーがグラフを受け取るまで待機
-
-    # 時間計測開始
-    start_time = time.perf_counter() # 現在の時間を取得
 
     # 開始頂点からの距離を配列で管理
     INF = m + 1 # 訪問できるのであれば開始頂点からの距離は m 以下なので m + 1 を無限大として扱える
