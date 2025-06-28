@@ -1,0 +1,45 @@
+※ セキュリティ上の理由から、ユーザ名やパスワード、パス名などを別の文字列に置き換えています
+※ ログイン成功時に表示される URL などの不要な情報に関しては削除しています
+
+Last login: Sat Jun 28 19:56:25 on ttys000
+firstname@lastname ~ % ssh -l userID url
+Enter passphrase for key '/Users/firstname/...': 
+(userID@url) Verification code: secretcode
+--------------------------------------------------------------------------------
+  supercomputer Information                                         Date: Jun. 25, 2025
+--------------------------------------------------------------------------------
+
+  Welcome to supercomputer system
+
+[userID@login-node ~]$ qsub -I -q quename -l walltime=01:00:00 -W group_list=group_name
+qsub: waiting for job jobID.opbs to start
+qsub: job jobID.opbs ready
+
+[userID@prepost-node ~]$ nproc --all
+224
+[userID@prepost-node ~]$ cd src/math
+[userID@prepost-node math]$ ls
+count_prime_benchmark.py           count_prime_parallel.py  count_prime.py  test_count_prime.py
+count_prime_parallel_benchmark.py  count_prime_problem.md   result
+[userID@prepost-node math]$ mpirun -np 224 python count_prime_parallel_benchmark.py 
+[userID@prepost-node math]$ ls
+count_prime_benchmark.py           count_prime_problem.md         result
+count_prime_parallel_benchmark.py  count_prime.py                 test_count_prime.py
+count_prime_parallel.py            output_super_parallel_224.txt
+[userID@prepost-node math]$ cat output_super_parallel_224.txt 
+224
+1 0 244
+10 4 96
+100 25 85
+1000 168 86
+10000 1229 103
+100000 9592 332
+1000000 78498 22996
+[userID@prepost-node math]$ exit
+logout
+
+qsub: job jobID.opbs completed
+[userID@login-node ~]$ exit
+logout
+Connection to url closed.
+firstname@lastname ~ % 
