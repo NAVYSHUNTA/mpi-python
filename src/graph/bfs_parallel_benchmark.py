@@ -118,7 +118,7 @@ def main():
 
         # 計算結果をテキストファイルに出力
         pc_name = "super" # 本プログラムを実行した PC の名前
-        output_file_path = f"{GET_OUTPUT_FILE_PATH[INPUT_FILE_PATH]}{pc_name}_{n}_{m}_{SIZE}.txt"
+        output_file_path = f"{GET_OUTPUT_FILE_PATH[INPUT_FILE_PATH]}{pc_name}_{n}_{m}_parallel_{SIZE}.txt"
         if rank == LEADER_RANK:
             total_time_ms_ceil = get_total_time_ms_ceil(start_time)
             with open(output_file_path, mode = "w") as file:
