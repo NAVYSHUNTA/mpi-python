@@ -79,8 +79,13 @@ def main():
         for u, v in edges:
             file.write(f"{u} {v}\n")
             assert 0 <= u < v <= n - 1, "辺の頂点番号が制約に違反しています"
+
     print(f"{graph_name} グラフを生成しました: {n} 頂点, {m} 辺")
-    print(f"出力ファイル: input_data/{graph_name}_graph_{n}_{m}.txt")
+
+    if graph_name == "tree":
+        print(f"出力ファイル: input_data/{graph_name}_{n}_{m}.txt")
+    else:
+        print(f"出力ファイル: input_data/{graph_name}_graph_{n}_{m}.txt")
 
 
 # エントリポイント
