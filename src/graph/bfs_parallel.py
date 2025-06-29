@@ -29,8 +29,7 @@ def main():
             n, m = map(int, lines[0].split())
             edges = [list(map(int, line.split())) for line in lines[1:m + 1]]
 
-        # 時間計測開始
-        start_time = time.perf_counter() # 現在の時間を取得
+        start_time = time.perf_counter()
 
         # グラフを用意する
         graph = [[] for _ in range(n)]
