@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import japanize_matplotlib # 図の中で日本語が使えるようにする
 
 CPU_NAME = "m2_max_mac"
-INPUT_DATA_PATH = f"./../math/result/{CPU_NAME}.txt"
+INPUT_DATA_PATH = f"./../../math/result/{CPU_NAME}.txt"
 
 x_input_size = [] # x 軸のデータ
 y_time = [] # y 軸のデータ
