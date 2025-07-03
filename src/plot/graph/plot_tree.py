@@ -5,7 +5,7 @@ import glob
 # グラフを作成する関数（引数は x 軸の上限値）
 # x 軸：並列度
 # y 軸：実行時間（ミリ秒）
-# 実験データは tree グラフの結果を使用
+# 実験データは木の結果を使用
 def plot_tree(cpu_size_limit = None):
     super_x_process_size = []
     super_y_time = []
@@ -54,7 +54,7 @@ def plot_tree(cpu_size_limit = None):
     plt.yticks(range(0, repeat * (REPEAT_SIZE + 3), repeat)) # y 軸の目盛りを設定
     plt.grid() # グリッド線を表示
     plt.legend(loc = "upper left") # 凡例を左上に表示
-    plt.title(f"1000 頂点 999 辺の tree グラフに対する実験結果")
+    plt.title(f"1000 頂点 999 辺の木に対する実験結果")
     plt.xlabel("並列度")
     plt.ylabel("実行時間 [ms]")
     plt.tight_layout() # レイアウトの調整
