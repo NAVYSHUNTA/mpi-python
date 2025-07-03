@@ -10,7 +10,7 @@ SIZE = COMM.Get_size() # 並列度（厳密にはそのコミュニケータに�
 START_VERTEX = 0 # 開始頂点
 UNVISITED_DIST = -1 # 訪問できない頂点までの距離は -1 とする
 INPUT_FILE_PATH_LIST = [
-    "input_data/line_graph_1000_999.txt",
+    "input_data/path_1000_999.txt",
     "input_data/tree_1000_999.txt",
     "input_data/random_graph_1000_2000.txt",
     "input_data/random_graph_1000_20000.txt",
@@ -18,7 +18,7 @@ INPUT_FILE_PATH_LIST = [
     "input_data/complete_graph_1000_499500.txt",
 ]
 GET_OUTPUT_FILE_PATH = {
-    "input_data/line_graph_1000_999.txt": "result/line_graph/",
+    "input_data/path_1000_999.txt": "result/path/",
     "input_data/tree_1000_999.txt": "result/tree/",
     "input_data/random_graph_1000_2000.txt": "result/random_graph/",
     "input_data/random_graph_1000_20000.txt": "result/random_graph/",

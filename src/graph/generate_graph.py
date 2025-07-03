@@ -3,8 +3,8 @@ import random
 
 # グラフの生成
 def generate_graph(graph_name, n, m):
-    if graph_name == "line":
-        # 単純道を生成
+    if graph_name == "path":
+        # 道（厳密には単純道）を生成
         m = min(m, n - 1) # m が n - 1 を超えないように調整
         edges = [(i, i + 1) for i in range(m)]
         return [n, m, edges]
@@ -69,7 +69,7 @@ def main():
     n, m, edges = generate_graph(graph_name, n, m)
 
     # 制約違反のチェック
-    assert graph_name in ["line", "tree", "random", "complete"], "グラフの名称が不正です"
+    assert graph_name in ["path", "tree", "random", "complete"], "グラフの名称が不正です"
     assert 2 <= n <= 10 ** 3, "頂点数が制約に違反しています"
     assert 1 <= m <= n * (n - 1) // 2, "辺数が制約に違反しています"
 

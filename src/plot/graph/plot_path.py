@@ -5,15 +5,15 @@ import glob
 # グラフを作成する関数（引数は x 軸の上限値）
 # x 軸：並列度
 # y 軸：実行時間（ミリ秒）
-# 実験データは line グラフの結果を使用
-def plot_line(cpu_size_limit = None):
+# 実験データは道の結果を使用
+def plot_path(cpu_size_limit = None):
     super_x_process_size = []
     super_y_time = []
     m2_x_process_size = []
     m2_y_time = []
 
     # 実験データの読み込み
-    files = glob.glob("./../../graph/result/line_graph/*.txt")
+    files = glob.glob("./../../graph/result/path/*.txt")
     for file_path in files:
         file_name = file_path.split("/")[-1]
         cpu_size = int(file_name.split("_")[-1].replace(".txt", ""))
@@ -54,23 +54,23 @@ def plot_line(cpu_size_limit = None):
     plt.yticks(range(0, repeat * (REPEAT_SIZE + 3), repeat)) # y 軸の目盛りを設定
     plt.grid() # グリッド線を表示
     plt.legend(loc = "upper left") # 凡例を左上に表示
-    plt.title(f"1000 頂点 999 辺の line グラフに対する実験結果")
+    plt.title(f"1000 頂点 999 辺の道に対する実験結果")
     plt.xlabel("並列度")
     plt.ylabel("実行時間 [ms]")
     plt.tight_layout() # レイアウトの調整
 
     # グラフの保存
-    save_path = "plot_line.png"
+    save_path = "plot_path.png"
     if cpu_size_limit is not None:
-        save_path = f"plot_line_limit_{cpu_size_limit}.png"
+        save_path = f"plot_path_limit_{cpu_size_limit}.png"
     plt.savefig(save_path) # 作成したグラフの保存先
     plt.close()
     return save_path
 
 
 def main():
-    path1 = plot_line() # 全ての並列度に対するグラフを作成
-    path2 = plot_line(cpu_size_limit = 100) # 特定の並列度以下のグラフを作成
+    path1 = plot_path() # 全ての並列度に対するグラフを作成
+    path2 = plot_path(cpu_size_limit = 100) # 特定の並列度以下のグラフを作成
     print("グラフを作成しました", path1, path2)
 
 
