@@ -55,7 +55,7 @@ def plot_math(input_size_lower_limit = None):
     # グラフの保存
     save_path = "plot_math.png"
     if input_size_lower_limit is not None:
-        save_path = f"plot_math_limit_{input_size_lower_limit}.png"
+        save_path = f"plot_math_lower_limit_{input_size_lower_limit}.png"
     plt.savefig(save_path) # 作成したグラフの保存先
     plt.close()
     return save_path
