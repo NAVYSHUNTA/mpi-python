@@ -3,13 +3,12 @@
 mpi4py は Python で MPI を利用するためのパッケージです。
 パッケージの詳細は [こちら（英語）](https://mpi4py.readthedocs.io/en/stable/index.html) から見れます。
 
-本プロジェクトは中村と津曲の共同開発のため、環境の差異をなくすために Docker を用います。
+本プロジェクトは環境の差異をなくすために Docker を用います。
 また、Docker を用いた開発がスムーズに行えるように Dev Container を用意しています。
 
-# 本プロジェクトのメンバー
+# 本プロジェクトの主な貢献者
 |学籍番号|名前|GitHub の URL|
 |:-|:-|:-|
-|25GJK08|津曲優斗|https://github.com/TsumagariYuto|
 |25GJK09|中村駿太|https://github.com/NAVYSHUNTA|
 
 # 実行方法
